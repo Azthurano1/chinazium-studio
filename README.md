@@ -58,3 +58,25 @@ The SQLite database is created in the operating system's application support dir
 - [Architecture](docs/ARCHITECTURE.md)
 - [Roadmap](docs/ROADMAP.md)
 - [Development guide](docs/DEVELOPMENT.md)
+
+
+## Windows releases
+
+Windows release builds are published in the GitHub [Releases](https://github.com/Azthurano1/chinazium-studio/releases) page.
+
+The workflow `.github/workflows/release-windows.yml`:
+- builds the Windows x64 app in GitHub Actions;
+- runs `flutter analyze` and `flutter test` before packaging;
+- attaches a ZIP containing the complete Windows app bundle;
+- also attaches the application executable as a convenience.
+
+To publish a version, create and push a version tag, for example:
+
+```powershell
+git tag v0.2.0
+git push origin v0.2.0
+```
+
+A release can also be started manually from the repository's **Actions → Build Windows Release → Run workflow** page. Enter a new version tag such as `v0.2.1`.
+
+**Important:** download and extract `ChinaziumStudio-Windows-x64.zip`, then run the `.exe` from the extracted folder. The standalone executable is not sufficient by itself because Flutter also needs the bundled runtime DLLs and data directory.
