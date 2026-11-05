@@ -26,6 +26,9 @@ jobs:
           channel: stable
           cache: true
 
+      - name: Set up Rust toolchain for Velopack Flutter
+        uses: dtolnay/rust-toolchain@stable
+
       - name: Generate Windows platform files
         working-directory: app
         run: flutter create --platforms=windows --project-name chinazium_studio .
