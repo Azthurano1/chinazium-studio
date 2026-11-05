@@ -2,17 +2,18 @@
 
 ## Decision
 
-Chinazium Studio is a **local-first** application. The MVP must run without a VPS, hosted database, account system or permanent internet connection.
+Chinazium Studio is a **local-first** application. The MVP runs without a VPS, hosted database, account system or permanent internet connection.
 
 ## Current foundation
 
 - Flutter UI, initially targeting Windows.
 - Dart application code.
-- Local persistence will use SQLite through Drift.
-- User documents and imported assets will be stored in user-selected local folders.
-- GitHub integration is optional and must not block core workflows.
+- SQLite persistence through `sqflite_common_ffi` for desktop.
+- Database file stored in the operating system's application support directory under `ChinaziumStudio/chinazium_studio.db`.
+- Project domain model and repository layer.
+- GitHub integration is optional and does not block core workflows.
 
-## Planned layers
+## Layers
 
 ```text
 Presentation (Flutter widgets)
@@ -20,14 +21,23 @@ Presentation (Flutter widgets)
 Feature modules
 (Dashboard / Projects / Tasks / Roadmap / Documents / Assets)
         |
-Application services
-        |
-Repositories (interfaces)
+Repositories
         |
 Local data sources (SQLite / filesystem)
 ```
 
-Feature screens must not issue SQL queries directly. They call application services or repositories. This keeps persistence replaceable and makes future sync possible.
+Feature screens must not issue SQL queries directly. They call repositories. This keeps persistence isolated and makes future synchronization possible without coupling widgets to the database.
+
+## Database
+
+The initial schema contains a `projects` table. Project records use UUID identifiers and ISO-8601 timestamps. Schema changes must increment the database version and provide an explicit migration path; never discard an existing user's database to apply an update.
+
+## Local files and backups
+
+- The user controls the local project database and asset folders.
+- Imported assets should be referenced by local paths rather than copied without consent.
+- Add backup/export before implementing destructive bulk operations.
+- Do not silently upload project content.
 
 ## Future integrations
 
@@ -41,10 +51,4 @@ A future sync service may synchronize selected projects between devices. Local I
 
 ### iOS
 
-The Flutter codebase should remain platform-neutral where practical. Windows-specific filesystem operations must be isolated behind services. iOS build and device testing will be a later milestone and requires macOS/Xcode.
-
-## Data ownership
-
-- The user controls the local project database and asset folders.
-- Provide backup/export before implementing destructive bulk operations.
-- Do not silently upload project content.
+The Flutter codebase should remain platform-neutral where practical. Desktop-specific database initialization must be isolated behind the database service. iOS build and device testing will be a later milestone and requires macOS/Xcode.
