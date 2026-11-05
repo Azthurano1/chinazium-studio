@@ -24,7 +24,7 @@ class AppDatabase {
     final path = p.join(databaseDirectory.path, 'chinazium_studio.db');
     _database = await openDatabase(
       path,
-      version: 2,
+      version: 3,
       onCreate: (db, version) async {
         await db.execute('''
           CREATE TABLE projects (
@@ -43,6 +43,7 @@ class AppDatabase {
           CREATE TABLE tasks (
             id TEXT PRIMARY KEY,
             project_id TEXT,
+            milestone_id TEXT,
             title TEXT NOT NULL,
             description TEXT NOT NULL DEFAULT '',
             status TEXT NOT NULL DEFAULT 'Todo',
@@ -53,8 +54,10 @@ class AppDatabase {
             FOREIGN KEY(project_id) REFERENCES projects(id) ON DELETE SET NULL
           )
         ''');
+        await _createMilestones(db);
         await db.execute('CREATE INDEX idx_tasks_status ON tasks(status)');
         await db.execute('CREATE INDEX idx_tasks_project_id ON tasks(project_id)');
+        await db.execute('CREATE INDEX idx_tasks_milestone_id ON tasks(milestone_id)');
       },
       onUpgrade: (db, oldVersion, newVersion) async {
         if (oldVersion < 2) {
@@ -75,9 +78,32 @@ class AppDatabase {
           await db.execute('CREATE INDEX idx_tasks_status ON tasks(status)');
           await db.execute('CREATE INDEX idx_tasks_project_id ON tasks(project_id)');
         }
+        if (oldVersion < 3) {
+          await db.execute('ALTER TABLE tasks ADD COLUMN milestone_id TEXT');
+          await _createMilestones(db);
+          await db.execute('CREATE INDEX idx_tasks_milestone_id ON tasks(milestone_id)');
+        }
       },
     );
     return _database!;
+  }
+
+  static Future<void> _createMilestones(DatabaseExecutor db) async {
+    await db.execute('''
+      CREATE TABLE milestones (
+        id TEXT PRIMARY KEY,
+        project_id TEXT,
+        title TEXT NOT NULL,
+        description TEXT NOT NULL DEFAULT '',
+        status TEXT NOT NULL DEFAULT 'Planning',
+        target_date TEXT,
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL,
+        FOREIGN KEY(project_id) REFERENCES projects(id) ON DELETE SET NULL
+      )
+    ''');
+    await db.execute('CREATE INDEX idx_milestones_project_id ON milestones(project_id)');
+    await db.execute('CREATE INDEX idx_milestones_target_date ON milestones(target_date)');
   }
 
   Future<void> close() async {

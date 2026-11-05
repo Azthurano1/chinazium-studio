@@ -9,6 +9,7 @@ class StudioTask {
     required this.dueDate,
     required this.createdAt,
     required this.updatedAt,
+    this.milestoneId,
   });
 
   final String id;
@@ -17,6 +18,7 @@ class StudioTask {
   final String status;
   final String priority;
   final String? projectId;
+  final String? milestoneId;
   final DateTime? dueDate;
   final DateTime createdAt;
   final DateTime updatedAt;
@@ -28,6 +30,7 @@ class StudioTask {
         status: map['status'] as String? ?? 'Todo',
         priority: map['priority'] as String? ?? 'Medium',
         projectId: map['project_id'] as String?,
+        milestoneId: map['milestone_id'] as String?,
         dueDate: map['due_date'] == null
             ? null
             : DateTime.tryParse(map['due_date']! as String),
@@ -42,6 +45,7 @@ class StudioTask {
         'status': status,
         'priority': priority,
         'project_id': projectId,
+        'milestone_id': milestoneId,
         'due_date': dueDate?.toIso8601String(),
         'created_at': createdAt.toIso8601String(),
         'updated_at': updatedAt.toIso8601String(),

@@ -14,10 +14,11 @@
 
 - [ ] Project detail page and project overview.
 - [x] Tasks CRUD with priorities, statuses, due dates and descriptions.
-- [ ] Subtasks and task-to-project relationships.
-- [ ] Subtasks and task-to-project relationships.
-- [ ] Roadmap milestones and milestone status.
-- [ ] Dashboard statistics backed by stored data.
+- [x] Task-to-project relationships.
+- [ ] Subtasks.
+- [x] Roadmap milestones with project links, target dates and statuses.
+- [x] Task-to-milestone assignment and progress calculated from completed tasks.
+- [ ] Dashboard statistics backed by stored data (project and task metrics).
 - [ ] Search, sorting and filtering.
 
 ## Phase 2 — Knowledge and production tracking

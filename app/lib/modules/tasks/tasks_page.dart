@@ -4,6 +4,8 @@ import '../projects/project.dart';
 import '../projects/project_repository.dart';
 import 'studio_task.dart';
 import 'task_repository.dart';
+import '../roadmap/milestone.dart';
+import '../roadmap/milestone_repository.dart';
 
 class TasksPage extends StatefulWidget {
   const TasksPage({
@@ -14,6 +16,7 @@ class TasksPage extends StatefulWidget {
 
   final TaskRepository repository;
   final ProjectRepository projects;
+  final MilestoneRepository milestones = MilestoneRepository();
 
   @override
   State<TasksPage> createState() => _TasksPageState();
@@ -43,6 +46,7 @@ class _TasksPageState extends State<TasksPage> {
       builder: (_) => _TaskEditor(
         repository: widget.repository,
         projectsRepository: widget.projects,
+        milestonesRepository: widget.milestones,
         task: task,
       ),
     );
@@ -169,6 +173,7 @@ class _TasksPageState extends State<TasksPage> {
                               status: value == true ? 'Done' : 'Todo',
                               priority: task.priority,
                               projectId: task.projectId,
+                              milestoneId: task.milestoneId,
                               dueDate: task.dueDate,
                               createdAt: task.createdAt,
                               updatedAt: task.updatedAt,
@@ -222,11 +227,13 @@ class _TaskEditor extends StatefulWidget {
   const _TaskEditor({
     required this.repository,
     required this.projectsRepository,
+    required this.milestonesRepository,
     this.task,
   });
 
   final TaskRepository repository;
   final ProjectRepository projectsRepository;
+  final MilestoneRepository milestonesRepository;
   final StudioTask? task;
 
   @override
@@ -240,6 +247,7 @@ class _TaskEditorState extends State<_TaskEditor> {
   late String _status;
   late String _priority;
   String? _projectId;
+  String? _milestoneId;
   DateTime? _dueDate;
   bool _saving = false;
 
@@ -255,6 +263,7 @@ class _TaskEditorState extends State<_TaskEditor> {
     _status = task?.status ?? 'Todo';
     _priority = task?.priority ?? 'Medium';
     _projectId = task?.projectId;
+    _milestoneId = task?.milestoneId;
     _dueDate = task?.dueDate;
   }
 
@@ -276,6 +285,7 @@ class _TaskEditorState extends State<_TaskEditor> {
           status: _status,
           priority: _priority,
           projectId: _projectId,
+          milestoneId: _milestoneId,
           dueDate: _dueDate,
         );
       } else {
@@ -287,6 +297,7 @@ class _TaskEditorState extends State<_TaskEditor> {
           status: _status,
           priority: _priority,
           projectId: _projectId,
+          milestoneId: _milestoneId,
           dueDate: _dueDate,
           createdAt: old.createdAt,
           updatedAt: old.updatedAt,
@@ -358,6 +369,28 @@ class _TaskEditorState extends State<_TaskEditor> {
                         ...projects.map((p) => DropdownMenuItem<String?>(value: p.id, child: Text(p.name))),
                       ],
                       onChanged: (v) => setState(() => _projectId = v),
+                    );
+                  },
+                ),
+                const SizedBox(height: 12),
+                FutureBuilder<List<Milestone>>(
+                  future: widget.milestonesRepository.getAll(
+                    projectId: _projectId,
+                  ),
+                  builder: (context, snapshot) {
+                    final items = snapshot.data ?? [];
+                    final selected = items.any((m) => m.id == _milestoneId)
+                        ? _milestoneId
+                        : null;
+                    return DropdownButtonFormField<String?>(
+                      initialValue: selected,
+                      decoration: const InputDecoration(labelText: 'Milestone (optional)'),
+                      items: [
+                        const DropdownMenuItem<String?>(value: null, child: Text('No milestone')),
+                        ...items.map((m) => DropdownMenuItem<String?>(
+                          value: m.id, child: Text(m.title))),
+                      ],
+                      onChanged: (value) => setState(() => _milestoneId = value),
                     );
                   },
                 ),
