@@ -37,6 +37,7 @@ class TaskRepository {
     String priority = 'Medium',
     String? projectId,
     DateTime? dueDate,
+    String? milestoneId,
   }) async {
     final now = DateTime.now();
     final task = StudioTask(
@@ -46,6 +47,7 @@ class TaskRepository {
       status: status,
       priority: priority,
       projectId: projectId,
+      milestoneId: milestoneId,
       dueDate: dueDate,
       createdAt: now,
       updatedAt: now,
@@ -63,6 +65,7 @@ class TaskRepository {
       status: task.status,
       priority: task.priority,
       projectId: task.projectId,
+      milestoneId: task.milestoneId,
       dueDate: task.dueDate,
       createdAt: task.createdAt,
       updatedAt: DateTime.now(),
