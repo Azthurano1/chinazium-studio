@@ -9,7 +9,10 @@ class GitHubIssuesRepository {
     required String repository,
     String state = 'open',
   }) async {
-    final normalized = repository.trim().replaceAll(RegExp(r'^https?://github\\.com/'), '').replaceAll(RegExp(r'\\.git$'), '');
+    final normalized = repository
+        .trim()
+        .replaceAll(RegExp(r'^https?://github\.com/'), '')
+        .replaceAll(RegExp(r'\.git$'), '');
     final parts = normalized.split('/');
     if (parts.length != 2 ||
         parts.any((part) => part.isEmpty || part.contains(' '))) {
@@ -28,7 +31,9 @@ class GitHubIssuesRepository {
     }).timeout(const Duration(seconds: 20));
 
     if (response.statusCode == 404) {
-      throw Exception('Repository not found or private. Public repositories are supported without a token.');
+      throw Exception(
+        'Repository not found or private. Public repositories are supported without a token.',
+      );
     }
     if (response.statusCode == 403 || response.statusCode == 429) {
       throw Exception('GitHub API rate limit reached. Try again later.');
