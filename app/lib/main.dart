@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'modules/projects/project_repository.dart';
+import 'modules/github/github_issues_page.dart';
 import 'modules/projects/projects_page.dart';
 import 'modules/settings/settings_page.dart';
 import 'core/updates/app_updater.dart';
@@ -63,6 +64,7 @@ enum StudioSection {
   dashboard('Dashboard', Icons.dashboard_outlined),
   projects('Projects', Icons.folder_outlined),
   tasks('Tasks', Icons.checklist_rounded),
+  github('GitHub Issues', Icons.code_rounded),
   roadmap('Roadmap', Icons.timeline_rounded),
   documents('Documents', Icons.description_outlined),
   assets('Assets', Icons.view_in_ar_outlined),
@@ -145,6 +147,7 @@ class _StudioShellState extends State<StudioShell> {
           repository: _tasks,
           projects: _projects,
         ),
+      StudioSection.github => const GitHubIssuesPage(),
       StudioSection.roadmap => const _PlaceholderPage(
           title: 'Roadmap',
           description: 'Organize production into milestones and releases.',
