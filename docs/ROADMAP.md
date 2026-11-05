@@ -13,7 +13,8 @@
 ## Phase 1 — Core project management
 
 - [ ] Project detail page and project overview.
-- [ ] Tasks CRUD with priorities, statuses, due dates and descriptions.
+- [x] Tasks CRUD with priorities, statuses, due dates and descriptions.
+- [ ] Subtasks and task-to-project relationships.
 - [ ] Subtasks and task-to-project relationships.
 - [ ] Roadmap milestones and milestone status.
 - [ ] Dashboard statistics backed by stored data.
@@ -29,8 +30,9 @@
 
 ## Phase 3 — Integrations
 
-- [ ] GitHub repository linking.
-- [ ] GitHub issues and pull request references.
+- [x] Public GitHub Issues browser with open/closed filters and issue metadata.
+- [ ] Persist repository links per project and map Issues to local tasks.
+- [ ] GitHub Pull Request references.
 - [ ] Safe authentication flow; no embedded secrets or committed tokens.
 - [ ] Optional export/import format.
 
