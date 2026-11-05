@@ -86,7 +86,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 const Text(
                   'Updates are distributed through public GitHub Releases. '
                   'When available, Velopack downloads a differential package '
-                  'and restarts the application to install it.',
+                  'and restarts the application to install it. The first update requires installing the Velopack Setup.exe once.',
                   style: TextStyle(color: Color(0xFF8F9BAA), height: 1.5)),
                 const SizedBox(height: 18),
                 if (!updaterSupported)
