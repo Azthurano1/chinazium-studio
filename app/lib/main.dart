@@ -7,6 +7,8 @@ import 'modules/settings/settings_page.dart';
 import 'core/updates/app_updater.dart';
 import 'modules/tasks/task_repository.dart';
 import 'modules/tasks/tasks_page.dart';
+import 'modules/roadmap/milestone_repository.dart';
+import 'modules/roadmap/roadmap_page.dart';
 
 Future<void> main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -86,6 +88,7 @@ class StudioShell extends StatefulWidget {
 class _StudioShellState extends State<StudioShell> {
   final _projects = ProjectRepository();
   final _tasks = TaskRepository();
+  final _milestones = MilestoneRepository();
   StudioSection _section = StudioSection.dashboard;
   int _refreshToken = 0;
 
@@ -148,10 +151,9 @@ class _StudioShellState extends State<StudioShell> {
           projects: _projects,
         ),
       StudioSection.github => const GitHubIssuesPage(),
-      StudioSection.roadmap => const _PlaceholderPage(
-          title: 'Roadmap',
-          description: 'Organize production into milestones and releases.',
-          icon: Icons.timeline_rounded,
+      StudioSection.roadmap => RoadmapPage(
+          repository: _milestones,
+          projects: _projects,
         ),
       StudioSection.documents => const _PlaceholderPage(
           title: 'Documents',
