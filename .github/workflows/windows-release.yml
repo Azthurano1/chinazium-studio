@@ -60,7 +60,7 @@ jobs:
 
       - name: Install Velopack CLI
         shell: pwsh
-        run: dotnet tool update --global vpk
+        run: dotnet tool install --global vpk
 
       # On the first run there is no previous release yet. From the second
       # successful run onward this downloads the last package metadata/assets
