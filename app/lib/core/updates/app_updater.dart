@@ -24,10 +24,10 @@ class AppUpdater {
   String get initializationError =>
       _initializationError ?? 'The updater is not initialized.';
 
-  String get installedVersion {
+  Future<String> get installedVersion async {
     if (!isSupported) return 'Development build';
     try {
-      return currentVersion();
+      return await currentVersion();
     } catch (_) {
       return 'Velopack installation required';
     }
