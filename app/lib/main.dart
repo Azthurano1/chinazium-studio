@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'modules/projects/project_repository.dart';
 import 'modules/projects/projects_page.dart';
+import 'modules/tasks/task_repository.dart';
+import 'modules/tasks/tasks_page.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -78,6 +80,7 @@ class StudioShell extends StatefulWidget {
 
 class _StudioShellState extends State<StudioShell> {
   final _projects = ProjectRepository();
+  final _tasks = TaskRepository();
   StudioSection _section = StudioSection.dashboard;
   int _refreshToken = 0;
 
@@ -135,10 +138,9 @@ class _StudioShellState extends State<StudioShell> {
           repository: _projects,
           onChanged: _onDataChanged,
         ),
-      StudioSection.tasks => const _PlaceholderPage(
-          title: 'Tasks',
-          description: 'Task planning is the next development milestone.',
-          icon: Icons.checklist_rounded,
+      StudioSection.tasks => TasksPage(
+          repository: _tasks,
+          projects: _projects,
         ),
       StudioSection.roadmap => const _PlaceholderPage(
           title: 'Roadmap',
