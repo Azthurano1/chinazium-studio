@@ -20,9 +20,11 @@ Chinazium Studio is a local-first workspace for planning and managing game devel
 - Tasks module with create, edit and delete operations.
 - GitHub Issues browser for public repositories, including open/closed filters, labels, authors and issue links. No token is required for public repositories.
 - Task status, priority, optional project association and due date.
-- SQLite schema migration from the initial projects database.
+- SQLite schema migrations that preserve existing project and task data.
+- Roadmap milestones with project association, target dates, status, and progress calculated from linked tasks.
+- Tasks can be assigned to a project and a roadmap milestone.
 
-The app is under active development. The Tasks module supports local task management. GitHub Issues can be viewed as a live task list for public repositories. Roadmap, document editing, asset catalog, software registry, backup/restore and hosted multi-device synchronization are still in development.
+The app is under active development. The Tasks module supports local task management. GitHub Issues can be viewed as a live task list for public repositories. Document editing, asset catalog, software registry, backup/restore and hosted multi-device synchronization are still in development.
 
 ## Repository layout
 
