@@ -80,8 +80,13 @@ class _SettingsPageState extends State<SettingsPage> {
                     fontSize: 18, fontWeight: FontWeight.w600)),
                 ]),
                 const SizedBox(height: 14),
-                Text('Installed version: ${AppUpdater.instance.installedVersion}',
-                  style: const TextStyle(color: Color(0xFFB6C0CC))),
+                FutureBuilder<String>(
+                  future: AppUpdater.instance.installedVersion,
+                  builder: (context, snapshot) => Text(
+                    'Installed version: ${snapshot.data ?? 'Loading…'}',
+                    style: const TextStyle(color: Color(0xFFB6C0CC)),
+                  ),
+                ),
                 const SizedBox(height: 8),
                 const Text(
                   'Updates are distributed through public GitHub Releases. '
