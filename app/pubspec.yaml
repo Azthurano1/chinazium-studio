@@ -13,6 +13,8 @@ dependencies:
   path_provider: ^2.1.5
   sqflite_common_ffi: ^2.3.6
   uuid: ^4.5.1
+  http: ^1.2.2
+  velopack_flutter: ^0.3.3
 
 dev_dependencies:
   flutter_test:
