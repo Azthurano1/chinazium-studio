@@ -1,0 +1,100 @@
+name: Build Windows Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: "Release tag (for example v0.2.0)"
+        required: true
+        default: "v0.2.0"
+
+permissions:
+  contents: write
+
+jobs:
+  build-windows:
+    name: Build Windows x64
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Enable Windows desktop
+        run: flutter config --enable-windows-desktop
+
+      - name: Generate Windows runner
+        working-directory: app
+        run: flutter create --platforms=windows .
+
+      - name: Install dependencies
+        working-directory: app
+        run: flutter pub get
+
+      - name: Analyze source
+        working-directory: app
+        run: flutter analyze
+
+      - name: Run tests
+        working-directory: app
+        run: flutter test
+
+      - name: Build Windows application
+        working-directory: app
+        run: flutter build windows --release
+
+      - name: Package Windows application
+        shell: pwsh
+        run: |
+          $candidates = @(
+            "app/build/windows/x64/runner/Release",
+            "app/build/windows/runner/Release"
+          )
+          $releaseDir = $candidates | Where-Object { Test-Path $_ } | Select-Object -First 1
+          if (-not $releaseDir) {
+            throw "Flutter Windows release output directory was not found."
+          }
+
+          $exe = Get-ChildItem -Path $releaseDir -Filter "*.exe" -File | Select-Object -First 1
+          if (-not $exe) {
+            throw "No executable was found in $releaseDir"
+          }
+
+          New-Item -ItemType Directory -Force -Path "dist" | Out-Null
+          Compress-Archive -Path "$releaseDir/*" -DestinationPath "dist/ChinaziumStudio-Windows-x64.zip" -CompressionLevel Optimal
+          Copy-Item $exe.FullName "dist/$($exe.Name)"
+
+          Write-Host "Packaged executable: $($exe.Name)"
+
+      - name: Select release tag
+        id: release
+        shell: pwsh
+        run: |
+          if ("${{ github.event_name }}" -eq "workflow_dispatch") {
+            $tag = "${{ inputs.tag_name }}"
+          } else {
+            $tag = "${{ github.ref_name }}"
+          }
+          if (-not $tag.StartsWith("v")) {
+            throw "Release tag must start with v (example: v0.2.0)"
+          }
+          "tag_name=$tag" >> $env:GITHUB_OUTPUT
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.release.outputs.tag_name }}
+          name: Chinazium Studio ${{ steps.release.outputs.tag_name }}
+          generate_release_notes: true
+          files: |
+            dist/ChinaziumStudio-Windows-x64.zip
+            dist/*.exe
