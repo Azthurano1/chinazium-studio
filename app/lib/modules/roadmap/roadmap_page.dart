@@ -78,9 +78,16 @@ class _RoadmapPageState extends State<RoadmapPage> {
           FilledButton.icon(onPressed: () => _edit(), icon: const Icon(Icons.add), label: const Text('New milestone')),
         ]),
         const SizedBox(height: 20),
-        Wrap(spacing: 8, children: ['All', 'Planning', 'In progress', 'On hold', 'Completed'].map((value) =>
-          ChoiceChip(label: Text(value), selected: _filter == value,
-            onSelected: (_) => setState(() => _filter = value)).toList()),
+        Wrap(
+          spacing: 8,
+          children: ['All', 'Planning', 'In progress', 'On hold', 'Completed']
+              .map((value) => ChoiceChip(
+                    label: Text(value),
+                    selected: _filter == value,
+                    onSelected: (_) => setState(() => _filter = value),
+                  ))
+              .toList(),
+        ),
         const SizedBox(height: 16),
         Expanded(child: FutureBuilder<List<Milestone>>(
           future: _milestones,

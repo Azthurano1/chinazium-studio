@@ -9,6 +9,8 @@ import 'modules/tasks/task_repository.dart';
 import 'modules/tasks/tasks_page.dart';
 import 'modules/roadmap/milestone_repository.dart';
 import 'modules/roadmap/roadmap_page.dart';
+import 'modules/documents/document_repository.dart';
+import 'modules/documents/documents_page.dart';
 
 Future<void> main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -89,6 +91,7 @@ class _StudioShellState extends State<StudioShell> {
   final _projects = ProjectRepository();
   final _tasks = TaskRepository();
   final _milestones = MilestoneRepository();
+  final _documents = DocumentRepository();
   StudioSection _section = StudioSection.dashboard;
   int _refreshToken = 0;
 
@@ -155,10 +158,9 @@ class _StudioShellState extends State<StudioShell> {
           repository: _milestones,
           projects: _projects,
         ),
-      StudioSection.documents => const _PlaceholderPage(
-          title: 'Documents',
-          description: 'Keep GDDs, narrative notes and technical documentation together.',
-          icon: Icons.description_outlined,
+      StudioSection.documents => DocumentsPage(
+          repository: _documents,
+          projects: _projects,
         ),
       StudioSection.assets => const _PlaceholderPage(
           title: 'Assets',

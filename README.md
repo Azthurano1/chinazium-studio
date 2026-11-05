@@ -22,6 +22,7 @@ Chinazium Studio is a local-first workspace for planning and managing game devel
 - Task status, priority, optional project association and due date.
 - SQLite schema migrations that preserve existing project and task data.
 - Roadmap milestones with project association, target dates, status, and progress calculated from linked tasks.
+- Local Markdown document library with GDD, character, world, mechanics, level and technical templates, preview, search and project association.
 - Tasks can be assigned to a project and a roadmap milestone.
 
 The app is under active development. The Tasks module supports local task management. GitHub Issues can be viewed as a live task list for public repositories. Document editing, asset catalog, software registry, backup/restore and hosted multi-device synchronization are still in development.

@@ -31,7 +31,7 @@ Feature screens must not issue SQL queries directly. They call repositories. Thi
 
 ## Database
 
-The schema contains `projects`, `tasks` and `milestones` tables. Versioned migrations add milestone support and the nullable task-to-milestone relationship without recreating user data. Project records use UUID identifiers and ISO-8601 timestamps. Schema changes must increment the database version and provide an explicit migration path; never discard an existing user's database to apply an update.
+The schema contains `projects`, `tasks`, `milestones` and `documents` tables. Documents store Markdown content, category, optional project association and timestamps. Versioned migrations add milestone support and the nullable task-to-milestone relationship without recreating user data. Project records use UUID identifiers and ISO-8601 timestamps. Schema changes must increment the database version and provide an explicit migration path; never discard an existing user's database to apply an update.
 
 ## Local files and backups
 
