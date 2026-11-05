@@ -1,45 +1,43 @@
-# Product Roadmap
+# Roadmap
 
 ## Phase 0 — Foundation
-- [x] Create repository documentation
-- [x] Add initial Flutter application shell
-- [x] Add dark desktop navigation and dashboard placeholder
-- [ ] Verify local Flutter/Windows build
-- [ ] Add lint and formatting checks
 
-## Phase 1 — Local data
-- [ ] Add SQLite and Drift
-- [ ] Add database migrations
-- [ ] Add repositories and application services
-- [ ] Add backup and restore
+- [x] Create the repository and product documentation.
+- [x] Establish the Flutter desktop application shell and dark theme.
+- [x] Add local SQLite database initialization.
+- [x] Add the first Projects CRUD workflow.
+- [x] Persist project records between application launches.
+- [x] Show the real project count on the Dashboard.
+- [ ] Run Flutter analysis and Windows smoke tests on a developer machine.
 
-## Phase 2 — Projects and tasks
-- [ ] Create, edit, archive and delete projects
-- [ ] Project overview and settings
-- [ ] Create and edit tasks
-- [ ] Task status, priority, category and due date
-- [ ] Subtasks and task relationships
-- [ ] Search, sorting and filters
+## Phase 1 — Core project management
 
-## Phase 3 — Production planning
-- [ ] Roadmap view
-- [ ] Milestones
-- [ ] Milestone progress
-- [ ] Project timeline
+- [ ] Project detail page and project overview.
+- [ ] Tasks CRUD with priorities, statuses, due dates and descriptions.
+- [ ] Subtasks and task-to-project relationships.
+- [ ] Roadmap milestones and milestone status.
+- [ ] Dashboard statistics backed by stored data.
+- [ ] Search, sorting and filtering.
 
-## Phase 4 — Game production knowledge
-- [ ] Markdown documents and GDD
-- [ ] Characters, locations, mechanics and lore
-- [ ] Software/tool catalog
-- [ ] Asset catalog and asset status workflow
+## Phase 2 — Knowledge and production tracking
 
-## Phase 5 — Integrations
-- [ ] GitHub repository connection
-- [ ] Link tasks to Issues and Pull Requests
-- [ ] Optional import/export
-- [ ] Evaluate secure cross-device synchronization
+- [ ] GDD and document editor with Markdown support.
+- [ ] Asset catalog with local file references and tags.
+- [ ] Software/tool registry per project.
+- [ ] Activity history.
+- [ ] Backup and restore for the local database and project metadata.
 
-## Phase 6 — iOS
-- [ ] Responsive mobile layouts
-- [ ] iOS filesystem and sharing workflows
-- [ ] Build and test on macOS/Xcode
+## Phase 3 — Integrations
+
+- [ ] GitHub repository linking.
+- [ ] GitHub issues and pull request references.
+- [ ] Safe authentication flow; no embedded secrets or committed tokens.
+- [ ] Optional export/import format.
+
+## Phase 4 — Quality and portability
+
+- [ ] Automated unit and widget tests.
+- [ ] Accessibility and responsive layout review.
+- [ ] Windows installer and release packaging.
+- [ ] iOS support and device testing (requires macOS/Xcode).
+- [ ] Evaluate optional sync without making a server mandatory.
