@@ -17,6 +17,9 @@ Chinazium Studio is a local-first workspace for planning and managing game devel
 - Projects list with create, edit and delete operations.
 - Project fields: name, description, genre, engine and status.
 - Dashboard project count backed by SQLite.
+- Tasks module with create, edit and delete operations.
+- Task status, priority, optional project association and due date.
+- SQLite schema migration from the initial projects database.
 
 The app is an actively developed MVP. Tasks, roadmap, documents, assets, GitHub integration, backup/restore and release packaging are not implemented yet.
 
