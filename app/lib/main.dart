@@ -328,7 +328,7 @@ class DashboardPage extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Text('Your workspace', style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.w650)),
+                            fontSize: 18, fontWeight: FontWeight.w600)),
                           const SizedBox(height: 8),
                           Text(
                             projectCount == 0
