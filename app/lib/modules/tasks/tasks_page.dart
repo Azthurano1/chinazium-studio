@@ -16,13 +16,13 @@ class TasksPage extends StatefulWidget {
 
   final TaskRepository repository;
   final ProjectRepository projects;
-  final MilestoneRepository milestones = MilestoneRepository();
 
   @override
   State<TasksPage> createState() => _TasksPageState();
 }
 
 class _TasksPageState extends State<TasksPage> {
+  final MilestoneRepository _milestones = MilestoneRepository();
   late Future<List<StudioTask>> _tasks;
   String _filter = 'All';
 
@@ -46,7 +46,7 @@ class _TasksPageState extends State<TasksPage> {
       builder: (_) => _TaskEditor(
         repository: widget.repository,
         projectsRepository: widget.projects,
-        milestonesRepository: widget.milestones,
+        milestonesRepository: _milestones,
         task: task,
       ),
     );
