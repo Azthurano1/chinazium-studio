@@ -39,6 +39,22 @@ class AppDatabase {
           )
         ''');
         await db.execute('CREATE INDEX idx_projects_updated_at ON projects(updated_at)');
+        await db.execute('''
+          CREATE TABLE tasks (
+            id TEXT PRIMARY KEY,
+            project_id TEXT,
+            title TEXT NOT NULL,
+            description TEXT NOT NULL DEFAULT '',
+            status TEXT NOT NULL DEFAULT 'Todo',
+            priority TEXT NOT NULL DEFAULT 'Medium',
+            due_date TEXT,
+            created_at TEXT NOT NULL,
+            updated_at TEXT NOT NULL,
+            FOREIGN KEY(project_id) REFERENCES projects(id) ON DELETE SET NULL
+          )
+        ''');
+        await db.execute('CREATE INDEX idx_tasks_status ON tasks(status)');
+        await db.execute('CREATE INDEX idx_tasks_project_id ON tasks(project_id)');
       },
       onUpgrade: (db, oldVersion, newVersion) async {
         if (oldVersion < 2) {
