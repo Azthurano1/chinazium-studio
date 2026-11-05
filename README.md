@@ -1,67 +1,60 @@
 # Chinazium Studio
 
-**Chinazium Studio** is a local-first desktop application for planning and managing game development projects — from the first idea to release.
+Chinazium Studio is a local-first workspace for planning and managing game development. It is designed to keep game design documents, production tasks, milestones, assets and development tools organized in one place.
 
-The first target is **Windows**. The application is being built with Flutter and Dart, with a shared codebase intended to support iOS later.
+## Product principles
 
-## Current status
+- Local-first: the core application works without a hosted service or account.
+- User-owned data: project data is stored on the user's computer.
+- Modular: features are separated so the application can grow without becoming one large screen.
+- Optional integrations: GitHub and future sync features must never block local workflows.
+- Safe by default: never commit credentials, tokens or private keys.
 
-**Version:** 0.1.0 (foundation)  
-**Stage:** Project setup and MVP foundation  
-**Backend:** None — local development only  
-**Database:** SQLite is planned for the next implementation step
+## Current implementation
 
-## MVP scope
+- Flutter desktop application shell with a dark theme.
+- Local SQLite database.
+- Projects list with create, edit and delete operations.
+- Project fields: name, description, genre, engine and status.
+- Dashboard project count backed by SQLite.
 
-- Dashboard with project and task overview
-- Multiple game projects
-- Tasks, priorities, statuses, due dates and subtasks
-- Roadmap with milestones
-- Categories and software/tool catalog
-- Markdown design documents
-- Asset catalog for models, textures, animation, audio and other game assets
-- Optional GitHub repository integration
-
-## Technology
-
-| Area | Choice |
-|---|---|
-| UI | Flutter / Dart |
-| Desktop target | Windows |
-| Future mobile target | iOS |
-| Local database | SQLite via Drift (planned) |
-| Local files | User-selected folders |
-| Source control | Git / GitHub |
-| Backend | Not required for the local MVP |
+The app is an actively developed MVP. Tasks, roadmap, documents, assets, GitHub integration, backup/restore and release packaging are not implemented yet.
 
 ## Repository layout
 
 ```text
-app/                 Flutter application
-docs/                Product and technical documentation
-assets/              Application assets
+app/       Flutter application
+docs/      Product, architecture and development documentation
 ```
 
-## Development
+## Requirements
 
-1. Install Git.
-2. Install Flutter SDK.
-3. Install Visual Studio 2022 with **Desktop development with C++**.
-4. Install VS Code and the Flutter and Dart extensions.
-5. Run:
+- Flutter SDK (stable channel)
+- Windows desktop development support enabled
+- Git
+
+## Run on Windows
+
+From PowerShell:
 
 ```powershell
 cd app
+flutter doctor
+flutter config --enable-windows-desktop
 flutter pub get
+flutter create --platforms=windows .
 flutter run -d windows
 ```
 
-See [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) for the Windows setup checklist.
+Run `flutter analyze` before submitting changes.
 
-## Product principles
+## Local data
 
-- Local-first: core features must work without an account or internet connection.
-- User-owned data: projects and documents remain on the user's device.
-- Modular architecture: future sync and integrations must not be coupled to UI code.
-- No secrets in the client: GitHub credentials must never be hard-coded or committed.
-- Cross-platform by design, desktop-first in implementation.
+The SQLite database is created in the operating system's application support directory, inside the `ChinaziumStudio` folder. The database file is named `chinazium_studio.db`.
+
+## Documentation
+
+- [Product specification](docs/PRODUCT_SPEC.md)
+- [Architecture](docs/ARCHITECTURE.md)
+- [Roadmap](docs/ROADMAP.md)
+- [Development guide](docs/DEVELOPMENT.md)
