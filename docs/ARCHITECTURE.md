@@ -11,6 +11,7 @@ Chinazium Studio is a **local-first** application. The MVP runs without a VPS, h
 - SQLite persistence through `sqflite_common_ffi` for desktop.
 - Database file stored in the operating system's application support directory under `ChinaziumStudio/chinazium_studio.db`.
 - Project domain model and repository layer.
+- Milestone domain model and repository layer, with task-linked progress queries.
 - GitHub integration is optional and does not block core workflows.
 
 ## Layers
@@ -30,7 +31,7 @@ Feature screens must not issue SQL queries directly. They call repositories. Thi
 
 ## Database
 
-The initial schema contains a `projects` table. Project records use UUID identifiers and ISO-8601 timestamps. Schema changes must increment the database version and provide an explicit migration path; never discard an existing user's database to apply an update.
+The schema contains `projects`, `tasks` and `milestones` tables. Versioned migrations add milestone support and the nullable task-to-milestone relationship without recreating user data. Project records use UUID identifiers and ISO-8601 timestamps. Schema changes must increment the database version and provide an explicit migration path; never discard an existing user's database to apply an update.
 
 ## Local files and backups
 
