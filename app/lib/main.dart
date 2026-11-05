@@ -1,48 +1,15 @@
-import 'dart:convert';
-import 'dart:io';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:velopack_flutter/velopack_flutter.dart';
 
 import 'modules/projects/project_repository.dart';
 import 'modules/projects/projects_page.dart';
 import 'modules/settings/settings_page.dart';
+import 'core/updates/app_updater.dart';
 import 'modules/tasks/task_repository.dart';
 import 'modules/tasks/tasks_page.dart';
 
 Future<void> main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  if (Platform.isWindows && kReleaseMode) {
-    try {
-      final response = await http.get(
-        Uri.parse('https://api.github.com/repos/Azthurano1/chinazium-studio/releases/latest'),
-        headers: const {'Accept': 'application/vnd.github+json'},
-      );
-      if (response.statusCode == 200) {
-        final release = jsonDecode(response.body) as Map<String, dynamic>;
-        final tag = release['tag_name'] as String?;
-        if (tag != null && tag.isNotEmpty) {
-          await initializeVelopack(
-            url: 'https://github.com/Azthurano1/chinazium-studio/releases/download/$tag/',
-          );
-        }
-      }
-    } catch (_) {
-      // Keep the application usable if GitHub is temporarily unavailable.
-    }
-
-    const veloCommands = [
-      '--veloapp-install',
-      '--veloapp-updated',
-      '--veloapp-obsolete',
-      '--veloapp-uninstall',
-    ];
-    if (veloCommands.any(args.contains)) exit(0);
-  }
-
+  await AppUpdater.instance.initialize(args);
   runApp(const ChinaziumStudioApp());
 }
 
@@ -270,7 +237,7 @@ class _Sidebar extends StatelessWidget {
           const Divider(height: 1),
           const Padding(
             padding: EdgeInsets.all(18),
-            child: Text('LOCAL WORKSPACE  •  v0.2.0',
+            child: Text('LOCAL WORKSPACE  •  AUTO-UPDATES',
               style: TextStyle(color: Color(0xFF7D8998), fontSize: 10)),
           ),
         ],
