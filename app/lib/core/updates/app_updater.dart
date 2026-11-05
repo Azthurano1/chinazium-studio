@@ -9,16 +9,27 @@ class AppUpdater {
   AppUpdater._();
 
   static final AppUpdater instance = AppUpdater._();
+
+  static const _repository = 'Azthurano1/chinazium-studio';
+  static const _releaseApi =
+      'https://api.github.com/repos/$_repository/releases/latest';
+  static const _releaseDownloadBase =
+      'https://github.com/$_repository/releases/download/';
+
   bool _initialized = false;
+  String? _initializationError;
 
   bool get isSupported => Platform.isWindows && !kDebugMode && _initialized;
+
+  String get initializationError =>
+      _initializationError ?? 'The updater is not initialized.';
 
   String get installedVersion {
     if (!isSupported) return 'Development build';
     try {
       return currentVersion();
     } catch (_) {
-      return 'Not installed with the Chinazium Studio installer';
+      return 'Velopack installation required';
     }
   }
 
@@ -27,21 +38,32 @@ class AppUpdater {
 
     try {
       final response = await http.get(
-        Uri.parse('https://api.github.com/repos/Azthurano1/chinazium-studio/releases/latest'),
-        headers: const {'Accept': 'application/vnd.github+json'},
-      );
-      if (response.statusCode == 200) {
-        final release = jsonDecode(response.body) as Map<String, dynamic>;
-        final tag = release['tag_name'] as String?;
-        if (tag != null && tag.isNotEmpty) {
-          await initializeVelopack(
-            url: 'https://github.com/Azthurano1/chinazium-studio/releases/download/$tag/',
-          );
-          _initialized = true;
-        }
+        Uri.parse(_releaseApi),
+        headers: const {
+          'Accept': 'application/vnd.github+json',
+          'X-GitHub-Api-Version': '2022-11-28',
+          'User-Agent': 'Chinazium-Studio-Updater',
+        },
+      ).timeout(const Duration(seconds: 12));
+
+      if (response.statusCode != 200) {
+        throw HttpException(
+          'GitHub Releases returned HTTP ${response.statusCode}.',
+        );
       }
-    } catch (_) {
-      // Do not prevent startup when GitHub is temporarily unavailable.
+
+      final release = jsonDecode(response.body) as Map<String, dynamic>;
+      final tag = release['tag_name'] as String?;
+      if (tag == null || tag.isEmpty) {
+        throw const FormatException('Latest GitHub Release has no tag_name.');
+      }
+
+      await initializeVelopack(url: '$_releaseDownloadBase$tag/');
+      _initialized = true;
+      _initializationError = null;
+    } catch (error) {
+      _initializationError = error.toString();
+      // Updates must never prevent the workspace from starting.
     }
 
     const veloCommands = [
@@ -54,7 +76,13 @@ class AppUpdater {
   }
 
   Future<bool> checkForUpdates() async {
-    if (!isSupported) return false;
+    if (!isSupported) {
+      throw StateError(
+        'The updater is unavailable. Install Chinazium Studio using the '
+        'Velopack Setup.exe from GitHub Releases. '
+        'Details: $initializationError',
+      );
+    }
     return isUpdateAvailable();
   }
 
@@ -66,7 +94,7 @@ class AppUpdater {
     }
 
     await for (final _ in checkAndDownloadUpdatesWithProgress()) {
-      // Consume progress events while Velopack downloads the delta package.
+      // Consume Velopack progress events until the delta/full package is ready.
     }
     await updateAndRestart();
   }
