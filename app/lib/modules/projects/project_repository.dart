@@ -20,7 +20,8 @@ class ProjectRepository {
   Future<int> count() async {
     final db = await _database.database;
     final result = await db.rawQuery('SELECT COUNT(*) AS total FROM projects');
-    return Sqflite.firstIntValue(result) ?? 0;
+    final total = result.first['total'];
+    return total is num ? total.toInt() : 0;
   }
 
   Future<Project> create({
