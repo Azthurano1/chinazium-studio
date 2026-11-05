@@ -14,7 +14,7 @@ jobs:
     name: Build and publish Windows updater release
     runs-on: windows-latest
     env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      VPK_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       APP_VERSION: 0.4.${{ github.run_number }}
     steps:
       - name: Checkout repository
@@ -56,9 +56,12 @@ jobs:
 
       - name: Install Velopack CLI
         shell: pwsh
-        run: dotnet tool install --global vpk
+        run: dotnet tool update --global vpk
 
-      - name: Download previous Velopack release for delta generation
+      # On the first run there is no previous release yet. From the second
+      # successful run onward this downloads the last package metadata/assets
+      # so vpk pack can create a delta package.
+      - name: Download previous release for delta generation
         shell: pwsh
         continue-on-error: true
         run: vpk download github --repoUrl https://github.com/Azthurano1/chinazium-studio
@@ -67,6 +70,6 @@ jobs:
         shell: pwsh
         run: vpk pack --packId ChinaziumStudio --packVersion $env:APP_VERSION --packDir app/build/windows/x64/runner/Release --mainExe chinazium_studio.exe --packTitle "Chinazium Studio" --outputDir Releases --channel win --delta BestSpeed
 
-      - name: Publish Velopack packages to GitHub Releases
+      - name: Publish versioned GitHub Release
         shell: pwsh
-        run: vpk upload github --repoUrl https://github.com/Azthurano1/chinazium-studio --publish --releaseName "Chinazium Studio $env:APP_VERSION" --tag "v$env:APP_VERSION" --token $env:GITHUB_TOKEN
+        run: vpk upload github --repoUrl https://github.com/Azthurano1/chinazium-studio --publish --releaseName "Chinazium Studio $env:APP_VERSION" --tag "v$env:APP_VERSION"
