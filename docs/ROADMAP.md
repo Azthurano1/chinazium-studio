@@ -23,7 +23,9 @@
 
 ## Phase 2 — Knowledge and production tracking
 
-- [ ] GDD and document editor with Markdown support.
+- [x] Local document library with Markdown editor and preview.
+- [x] GDD, character, world, mechanics, level and technical document templates.
+- [x] Project association, category filters and full-text title/content search.
 - [ ] Asset catalog with local file references and tags.
 - [ ] Software/tool registry per project.
 - [ ] Activity history.
