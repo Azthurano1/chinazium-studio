@@ -286,7 +286,7 @@ class _ProjectEditorState extends State<_ProjectEditor> {
                 TextFormField(controller: _engine, decoration: const InputDecoration(labelText: 'Game engine')),
                 const SizedBox(height: 12),
                 DropdownButtonFormField<String>(
-                  value: _status,
+                  initialValue: _status,
                   decoration: const InputDecoration(labelText: 'Status'),
                   items: _statuses.map((status) => DropdownMenuItem(value: status, child: Text(status))).toList(),
                   onChanged: (value) => setState(() => _status = value ?? _statuses.first),
