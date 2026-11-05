@@ -24,7 +24,7 @@ class AppDatabase {
     final path = p.join(databaseDirectory.path, 'chinazium_studio.db');
     _database = await openDatabase(
       path,
-      version: 3,
+      version: 4,
       onCreate: (db, version) async {
         await db.execute('''
           CREATE TABLE projects (
@@ -55,6 +55,7 @@ class AppDatabase {
           )
         ''');
         await _createMilestones(db);
+        await _createDocuments(db);
         await db.execute('CREATE INDEX idx_tasks_status ON tasks(status)');
         await db.execute('CREATE INDEX idx_tasks_project_id ON tasks(project_id)');
         await db.execute('CREATE INDEX idx_tasks_milestone_id ON tasks(milestone_id)');
@@ -83,6 +84,9 @@ class AppDatabase {
           await _createMilestones(db);
           await db.execute('CREATE INDEX idx_tasks_milestone_id ON tasks(milestone_id)');
         }
+        if (oldVersion < 4) {
+          await _createDocuments(db);
+        }
       },
     );
     return _database!;
@@ -104,6 +108,23 @@ class AppDatabase {
     ''');
     await db.execute('CREATE INDEX idx_milestones_project_id ON milestones(project_id)');
     await db.execute('CREATE INDEX idx_milestones_target_date ON milestones(target_date)');
+  }
+
+  static Future<void> _createDocuments(DatabaseExecutor db) async {
+    await db.execute('''
+      CREATE TABLE documents (
+        id TEXT PRIMARY KEY,
+        title TEXT NOT NULL,
+        content TEXT NOT NULL DEFAULT '',
+        category TEXT NOT NULL DEFAULT 'General',
+        project_id TEXT,
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL,
+        FOREIGN KEY(project_id) REFERENCES projects(id) ON DELETE SET NULL
+      )
+    ''');
+    await db.execute('CREATE INDEX idx_documents_project_id ON documents(project_id)');
+    await db.execute('CREATE INDEX idx_documents_updated_at ON documents(updated_at)');
   }
 
   Future<void> close() async {
