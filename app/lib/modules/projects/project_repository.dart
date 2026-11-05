@@ -1,4 +1,3 @@
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../core/database/app_database.dart';
