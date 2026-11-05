@@ -1,10 +1,10 @@
 name: chinazium_studio
 description: Local-first workspace for planning and managing game development projects.
 publish_to: "none"
-version: 0.3.0+3
+version: 0.4.0+4
 
 environment:
-  sdk: ">=3.5.0 <4.0.0"
+  sdk: ">=3.6.0 <4.0.0"
 
 dependencies:
   flutter:
