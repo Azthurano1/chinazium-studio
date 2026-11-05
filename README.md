@@ -63,23 +63,14 @@ The SQLite database is created in the operating system's application support dir
 - [Development guide](docs/DEVELOPMENT.md)
 
 
-## Windows releases
+## Windows releases and automatic updates
 
-Windows release builds are published in the GitHub [Releases](https://github.com/Azthurano1/chinazium-studio/releases) page.
+Windows builds are compiled in GitHub Actions after each commit to `main`. The workflow runs static analysis and tests, builds the Flutter Windows application, packages it with Velopack, generates differential update packages when a previous Velopack release is available, and publishes the installer and update metadata to GitHub Releases.
 
-The workflow `.github/workflows/release-windows.yml`:
-- builds the Windows x64 app in GitHub Actions;
-- runs `flutter analyze` and `flutter test` before packaging;
-- attaches a ZIP containing the complete Windows app bundle;
-- also attaches the application executable as a convenience.
+- First installation: download and run `ChinaziumStudio-Setup.exe` from [GitHub Releases](https://github.com/Azthurano1/chinazium-studio/releases).
+- Later updates: open **Settings → Check for updates**. Velopack downloads a delta package when it is smaller and suitable, then restarts the application to apply it.
+- The first Velopack release is a full package. Subsequent releases can include delta packages. Velopack may fall back to a full package when a delta is unavailable or larger.
 
-To publish a version, create and push a version tag, for example:
+The updater requires the repository and its Releases to be public. The application must be installed using the Velopack Setup installer; running an older extracted ZIP or launching from Flutter debug mode does not enable in-app updates.
 
-```powershell
-git tag v0.2.0
-git push origin v0.2.0
-```
-
-A release can also be started manually from the repository's **Actions → Build Windows Release → Run workflow** page. Enter a new version tag such as `v0.2.1`.
-
-**Important:** download and extract `ChinaziumStudio-Windows-x64.zip`, then run the `.exe` from the extracted folder. The standalone executable is not sufficient by itself because Flutter also needs the bundled runtime DLLs and data directory.
+The updater is implemented with the `velopack_flutter` package. Rust is required by its native bridge and is installed in the Windows release workflow.
